@@ -1,5 +1,9 @@
 <?php
-show_array($matches);
+/*show_array($matches);*/
+
+
+
+
 
 ?>
 <style>
@@ -8,7 +12,7 @@ show_array($matches);
         background: rgba(245, 245, 245, 1);
     }
     .image {
-        background-image: url('https://images.unsplash.com/photo-1560272564-c83b66b1ad12?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=687&q=80');
+        /*background-image: url('https://images.unsplash.com/photo-1560272564-c83b66b1ad12?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=687&q=80');*/
         background-position: center;
         background-repeat: no-repeat;
         background-size: cover;
@@ -46,11 +50,15 @@ show_array($matches);
 
 
 <?php
+helper('filesystem');
+$mapImg = directory_map('./assets/img/bg/');
 
-foreach ($matches as $jogo){ ?>
+
+foreach ($matches as $jogo){ $imagem = mt_rand(1,count($mapImg));?>
 
     <section class=" bg-white pb-3 shadow-sm mb-4">
-        <div class="row text-center py-3 image text-white" >
+        <div class="row text-center py-3 image text-white" style=" background-image: url('<?php echo base_url("assets/img/bg/").$imagem.".jpg";?>');
+                ">
             <div class="col">
                 <img class="img-fluid" src="<?= base_url('assets/img/logos/brasil/soccer/') . urlTitle($jogo['time_casa_nome']).".png"; ?>" alt="">
                 <br>
@@ -72,27 +80,31 @@ foreach ($matches as $jogo){ ?>
 
         <div class="row  p-4">
             <div class="col">
-                <span >Bolão:</span>
-            </div>
-            <div class="col">
-                <span >R$ por cota:</span>
+                <span >Acumulado: R$ <?= $jogo['acumulado'] ;?>,00</span>
             </div>
         </div>
         <div class="row text-center px-2">
-            <div class="col" data-partida=" <?= $jogo['id_jogo'] ?>" data-opcao="<?= $jogo['time_casa_nome'] ?>" >
-                <button class="btn btn-info btn-block opcao" type="submit"  ><?= $jogo['time_casa_nome'] ?></button>
+            <div class="col" data-partida=" <?= $jogo['id_jogo'] ?>" data-opcao="<?= $jogo['time_casa_nome']; ?>" >
+                <button class="btn btn-info btn-block opcao" type="submit"  ><?= $jogo['time_casa_nome']; ?></button>
+                <br>
+                <span >R$ <?= number_format( $jogo['apostas']['casa']['Pagar por cota'] , 2, ',', '.'); ?></span>
+
             </div>
             <div class="col" data-partida=" <?= $jogo['id_jogo'] ?>" data-opcao="empate">
                 <button class="btn btn-warning btn-block opcao" type="submit"  >Empate</button>
+                <br>
+                <span >R$ <?= number_format( $jogo['apostas']['empate']['Pagar por cota'] , 2, ',', '.') ;?></span>
             </div>
-            <div class="col" data-partida="<?= $jogo['id_jogo'] ?>" data-opcao="<?= $jogo['time_visitante_nome'] ?>">
-                <button class="btn btn-success btn-block opcao" type="submit"  ><?= $jogo['time_visitante_nome'] ?></button>
+            <div class="col" data-partida="<?= $jogo['id_jogo'] ?>" data-opcao="<?= $jogo['time_visitante_nome'] ;?>">
+                <button class="btn btn-success btn-block opcao" type="submit"  ><?= $jogo['time_visitante_nome'] ;?></button>
+                <br>
+                <span >R$ <?= number_format( $jogo['apostas']['visitante']['Pagar por cota'] , 2, ',', '.'); ?></span>
             </div>
         </div>
     </section>
 
 
-<?php } ?>
+<?php  } ?>
 
 
 <div class="   " id="modal" tabindex="-1" role="dialog"   aria-labelledby="TituloModalCentralizado" aria-hidden="true">
@@ -116,7 +128,17 @@ foreach ($matches as $jogo){ ?>
                 </div>
 
                 <div class="form-group">
-                    <input style="height: 50px" inputmode="numeric" pattern="[0-9]*" type="number" class="form-control" placeholder="Valor mínimo R$ 5,00" name="<?php ['time_casa']; ?>" id="investiment">
+                    <div class="form-group">
+                        <label for="exampleFormControlSelect1">Example select</label>
+                        <select class="form-control" id="exampleFormControlSelect1">
+                            <?php
+                            $x=1;
+                            while ($x < 11){ ?>
+                                <option value="<?= $x *5;?>">R$ <?= number_format($x * 5, 2, ',', '.');?></option>
+                        <?php  $x++;  }
+                            ?>
+                        </select>
+                    </div>
                 </div>
             </div>
             <div class="modal-footer">

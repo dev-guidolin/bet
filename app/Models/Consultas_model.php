@@ -46,13 +46,6 @@ class Consultas_model extends Model
         $matches = $jogos->getMatchesByLiga($liga['id_liga']);
 
 
-
-        /*
-         * Se não existir apostas, retorna array vazio
-         */
-
-
-
         foreach ($matches as $key => $item)
         {
             $casa = $times->getTimeById($item['time_casa']);
