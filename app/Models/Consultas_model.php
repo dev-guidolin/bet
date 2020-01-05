@@ -45,13 +45,12 @@ class Consultas_model extends Model
         $liga = $ligas->getLeagueBySlug($slug);
         $matches = $jogos->getMatchesByLiga($liga['id_liga']);
 
+
+
         /*
          * Se não existir apostas, retorna array vazio
          */
-        $bets = $apostas->getAnaliseApostas($matches[1]['id_jogo']);
 
-
-        show_array( $bets);
 
 
         foreach ($matches as $key => $item)
@@ -59,14 +58,15 @@ class Consultas_model extends Model
             $casa = $times->getTimeById($item['time_casa']);
             $visitante= $times->getTimeById($item['time_visitante']);
 
-
-
-
             $matches[$key]['time_casa_nome'] = $casa['nome_time'];
             $matches[$key]['time_visitante_nome'] = $visitante['nome_time'];
             $matches[$key]['nome_liga'] = $liga['nome_liga'];
 
+            $bets = $apostas->getAnaliseApostas($matches[$key]['id_jogo']);
+
+
             $matches[$key]['analise'] = $liga['nome_liga'];
+            $matches[$key]['apostas'] = $bets;
 
         }
 

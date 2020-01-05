@@ -1,5 +1,5 @@
 <?php
-/*show_array($matches);*/
+show_array($matches);
 
 ?>
 <style>
